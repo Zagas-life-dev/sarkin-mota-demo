@@ -3,10 +3,10 @@ import { createClientComponentClient } from '@/lib/supabase-client'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const carId = params.id
+    const { id: carId } = await params
 
     if (!carId) {
       return NextResponse.json(

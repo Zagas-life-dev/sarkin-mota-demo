@@ -20,6 +20,15 @@ export interface UploadOptions {
   crop?: string
 }
 
+function getUploadSource(file: Buffer | string): string {
+  if (typeof file === 'string') {
+    return file
+  }
+
+  // Cloudinary `upload` expects a string source, so convert buffers to data URIs.
+  return `data:application/octet-stream;base64,${file.toString('base64')}`
+}
+
 /**
  * Upload image to Cloudinary (Server-side only)
  * @param file - File buffer, base64 string, or file path
@@ -31,7 +40,7 @@ export async function uploadImage(
   options: UploadOptions = {}
 ): Promise<string> {
   try {
-    const result = await cloudinary.uploader.upload(file, {
+    const result = await cloudinary.uploader.upload(getUploadSource(file), {
       resource_type: 'image',
       folder: options.folder || 'sarkin-mota-autos/cars',
       public_id: options.public_id,
@@ -64,7 +73,7 @@ export async function uploadVideo(
   options: UploadOptions = {}
 ): Promise<string> {
   try {
-    const result = await cloudinary.uploader.upload(file, {
+    const result = await cloudinary.uploader.upload(getUploadSource(file), {
       resource_type: 'video',
       folder: options.folder || 'sarkin-mota-autos/cars/videos',
       public_id: options.public_id,

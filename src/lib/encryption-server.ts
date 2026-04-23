@@ -110,10 +110,12 @@ export function decryptMessage(encryptedData: string): string {
     const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv)
     decipher.setAuthTag(authTag)
     
-    // Decrypt the message
-    let decrypted = decipher.update(encrypted, null, 'utf8')
-    decrypted += decipher.final('utf8')
-    
+    // Decrypt the message from raw bytes to utf-8 string
+    const decrypted = Buffer.concat([
+      decipher.update(encrypted),
+      decipher.final(),
+    ]).toString('utf8')
+
     return decrypted
   } catch (error) {
     console.error('Decryption error:', error)

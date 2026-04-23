@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import DashboardLayout from '@/components/DashboardLayout'
 import { createClientComponentClient } from '@/lib/supabase-client'
-import { CarRequest, UserFavorite } from '@/types/database'
+import { CarRequest } from '@/types/database'
 import { 
   User, 
   Car, 
@@ -28,7 +28,7 @@ export default function DashboardPage() {
   const [user, setUser] = useState<any>(null)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [carRequests, setCarRequests] = useState<CarRequest[]>([])
-  const [favorites, setFavorites] = useState<UserFavorite[]>([])
+  const [favorites, setFavorites] = useState<Array<{ id: string }>>([])
   const [loading, setLoading] = useState(true)
   const [checkingAuth, setCheckingAuth] = useState(true)
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { Suspense, useState, useEffect, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import DashboardLayout from '@/components/DashboardLayout'
@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 import { formatPrice } from '@/lib/cars'
 
-export default function MessagesPage() {
+function MessagesPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClientComponentClient()
@@ -411,6 +411,25 @@ export default function MessagesPage() {
         </div>
       </div>
     </DashboardLayout>
+  )
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense
+      fallback={
+        <DashboardLayout>
+          <div className="flex items-center justify-center min-h-[80vh]">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin text-[#d4af37] mx-auto mb-4" />
+              <p className="text-gray-400 font-light">Loading messages...</p>
+            </div>
+          </div>
+        </DashboardLayout>
+      }
+    >
+      <MessagesPageContent />
+    </Suspense>
   )
 }
 
